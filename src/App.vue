@@ -1,16 +1,14 @@
 <template>
-  <router-link to="/">Home</router-link> |
-  <router-link to="/about">About</router-link> |
-  <button class="btn btn-outline-primary">234234</button>
-  <router-view></router-view>
+  <div class="container my-5">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import { RouterView, RouterLink } from "vue-router";
+import { RouterView } from "vue-router";
 export default {
   components: {
     RouterView,
-    RouterLink,
   },
 };
 </script>
