@@ -29,7 +29,29 @@ const router = createRouter({
           path: "cart",
           component: () => import("../views/front/CartView.vue"),
         },
+        {
+          path: "login",
+          component: () => import("../views/front/LoginView.vue"),
+        },
       ],
+    },
+    {
+      path: "/admin",
+      component: () => import("../views/DashboardView.vue"),
+      children: [
+        {
+          path: "products",
+          component: () => import("../views/admin/AdminProducts.vue"),
+        },
+        {
+          path: "orders",
+          component: () => import("../views/admin/AdminOrders.vue"),
+        },
+      ],
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      component: () => import("../views/404View.vue"),
     },
   ],
 });

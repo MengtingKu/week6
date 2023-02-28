@@ -1,6 +1,9 @@
 <template>
-  <h1>這是一個「產品列表」頁面</h1>
-  <table class="table align-middle">
+  <div class="loading" v-if="isLoading">
+    <div class="bounceBall me-2"></div>
+    <div class="text h5">NOW LOADING...ʕ̯•͡ˑ͓•̯᷅ʔ</div>
+  </div>
+  <table class="table align-middle" v-else>
     <thead>
       <tr>
         <th width="25%">圖片</th>
@@ -40,14 +43,20 @@
             <RouterLink
               :to="`product/${product.id}`"
               class="btn btn-outline-secondary"
-              >查看更多</RouterLink
+              ><font-awesome-icon
+                class="me-2"
+                icon="fa-solid fa-magnifying-glass"
+              />查看更多</RouterLink
             >
             <button
               type="button"
               class="btn btn-outline-danger"
               @click="addToCart(product.id)"
             >
-              加到購物車
+              <font-awesome-icon
+                class="me-2"
+                icon="fa-solid fa-cart-shopping"
+              />加到購物車
             </button>
           </div>
         </td>
@@ -65,6 +74,7 @@ export default {
     return {
       products: [],
       page: {},
+      isLoading: true,
     };
   },
   components: [RouterLink],
