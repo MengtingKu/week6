@@ -21,6 +21,7 @@
           <th class="text-center" width="120">原價</th>
           <th class="text-center" width="120">售價</th>
           <th class="text-center" width="100">是否啟用</th>
+          <th class="text-center" width="120">編輯</th>
         </tr>
       </thead>
       <tbody>
@@ -33,17 +34,38 @@
             <span class="text-success" v-if="product.is_enabled">啟用</span>
             <span v-else>未啟用</span>
           </td>
+          <td>
+            <div class="btn-group">
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-sm"
+                @click="openModal('edit', product)"
+                data-id="item.id"
+              >
+                編輯
+              </button>
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-sm"
+                @click="openModal('del', product)"
+              >
+                刪除
+              </button>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
-    <pagination :pages="page" :get-products="getProductList"></pagination>
+    <Pagination :pages="page" :get-products="getProductList" />
   </div>
+  <ProductModal ref="productModal"></ProductModal>
 </template>
 
 <script>
 import axios from "axios";
+import ProductModal from "@/components/TheModal.vue";
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
-import pagination from "@/components/ThePagination.vue";
+import Pagination from "@/components/ThePagination.vue";
 export default {
   data() {
     return {
@@ -51,10 +73,14 @@ export default {
       isNew: true,
       isLoading: true,
       page: {},
+      tempProduct: {
+        imagesUrl: [],
+      },
     };
   },
   components: {
-    pagination,
+    Pagination,
+    ProductModal,
   },
   methods: {
     checkLogin() {
@@ -84,22 +110,37 @@ export default {
           alert(err.response.data.message);
         });
     },
+    // openModal(status, product) {
+    //   if (status === "create") {
+    //     this.isNew = true;
+    //     // 資料初始化，因為物件內有陣列，所以一定要重新初始化乾淨才不會出錯
+    //     this.tempProduct = {
+    //       imagesUrl: [],
+    //     };
+    //   } else if (status === "edit") {
+    //     this.isNew = false;
+    //     this.tempProduct = { ...product };
+    //     if (!Array.isArray(this.tempProduct.imagesUrl)) {
+    //       this.tempProduct.imagesUrl = [];
+    //       this.tempProduct.imagesUrl.push("");
+    //     }
+    //   } else if (status === "del") {
+    //     this.tempProduct = { ...product };
+    //   }
+    // },
     openModal(status, product) {
       if (status === "create") {
-        this.isNew = true;
-
-        // 資料初始化，因為物件內有陣列，所以一定要重新初始化乾淨才部會出錯
         this.tempProduct = {
           imagesUrl: [],
         };
+        this.isNew = true;
+        this.$refs.productModal.openModal();
       } else if (status === "edit") {
         this.isNew = false;
+        this.$refs.productModal.openModal();
         this.tempProduct = { ...product };
-        if (!Array.isArray(this.tempProduct.imagesUrl)) {
-          this.tempProduct.imagesUrl = [];
-          this.tempProduct.imagesUrl.push("");
-        }
       } else if (status === "del") {
+        this.$refs.productModal.openModal();
         this.tempProduct = { ...product };
       }
     },

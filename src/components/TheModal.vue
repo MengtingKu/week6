@@ -32,57 +32,55 @@
                     type="text"
                     class="form-control"
                     placeholder="請輸入圖片連結"
-                    v-model="tempProduct.imageUrl"
+                    v-model="product.imageUrl"
                   />
                 </div>
                 <img
                   class="img-fluid"
-                  :src="tempProduct.imageUrl"
-                  :alt="tempProduct.title"
+                  :src="product.imageUrl"
+                  :alt="product.title"
                 />
               </div>
 
               <h3 class="my-3 text-center">=== 多圖新增 / 刪除 ===</h3>
-              <!-- 判斷 tempProduct.imagesUrl 是一個陣列 -->
-              <div v-if="Array.isArray(tempProduct.imagesUrl)">
+              <div v-if="Array.isArray(product.imagesUrl)">
                 <div
                   class="form-floating mb-3"
-                  v-for="(img, i) in tempProduct.imagesUrl"
+                  v-for="(img, i) in product.imagesUrl"
                   :key="i + 12"
                 >
                   <input
                     type="url"
                     class="form-control"
-                    v-model="tempProduct.imagesUrl[i]"
+                    v-model="product.imagesUrl[i]"
                   />
                   <img
-                    :src="tempProduct.imagesUrl[i]"
+                    :src="product.imagesUrl[i]"
                     alt=""
                     class="img-fluid mb-3"
                   />
                 </div>
-                <!-- 判斷新增 / 刪除條件 -->
                 <div
                   v-if="
-                    tempProduct.imagesUrl.length == 0 ||
-                    tempProduct.imagesUrl[tempProduct.imagesUrl.length - 1]
+                    product.imagesUrl.length == 0 ||
+                    product.imagesUrl[product.imagesUrl.length - 1]
                   "
                 >
-                  {{ tempProduct.imagesUrl.length }}
+                  {{ product.imagesUrl.length }}
                   <button
                     type="button"
                     class="btn btn-outline-primary btn-sm d-block w-100"
-                    @click="tempProduct.imagesUrl.push('')"
+                    @click="product.imagesUrl.push('')"
                   >
                     新增圖片
                   </button>
                 </div>
                 <div v-else>
-                  {{ tempProduct.imagesUrl.length }}
+                  {{ product.imagesUrl.length }}
                   <button
                     class="btn btn-outline-danger btn-sm d-block w-100"
                     type="button"
-                    @click="tempProduct.imagesUrl.pop()"
+                    @click="product.imagesUrl.pop()"
                   >
                     刪除圖片
                   </button>
@@ -97,7 +95,7 @@
                   type="text"
                   class="form-control"
                   placeholder="請輸入標題"
-                  v-model="tempProduct.title"
+                  v-model="product.title"
                 />
               </div>
               <div class="row">
@@ -108,7 +106,7 @@
                     type="text"
                     class="form-control"
                     placeholder="請輸入分類"
-                    v-model="tempProduct.category"
+                    v-model="product.category"
                   />
                 </div>
                 <div class="mb-3 col-md-6">
@@ -118,7 +116,7 @@
                     type="text"
                     class="form-control"
                     placeholder="請輸入單位"
-                    v-model="tempProduct.unit"
+                    v-model="product.unit"
                   />
                 </div>
               </div>
@@ -132,7 +130,7 @@
                     min="0"
                     class="form-control"
                     placeholder="請輸入原價"
-                    v-model.number="tempProduct.origin_price"
+                    v-model.number="product.origin_price"
                   />
                 </div>
                 <div class="mb-3 col-md-6">
@@ -143,7 +141,7 @@
                     min="0"
                     class="form-control"
                     placeholder="請輸入售價"
-                    v-model.number="tempProduct.price"
+                    v-model.number="product.price"
                   />
                 </div>
               </div>
@@ -155,7 +153,7 @@
                   id="description"
                   class="form-control"
                   placeholder="請輸入產品描述"
-                  v-model="tempProduct.description"
+                  v-model="product.description"
                 ></textarea>
               </div>
               <div class="mb-3">
@@ -164,7 +162,7 @@
                   id="content"
                   class="form-control"
                   placeholder="請輸入說明內容"
-                  v-model="tempProduct.content"
+                  v-model="product.content"
                 ></textarea>
               </div>
               <div class="mb-3">
@@ -175,7 +173,7 @@
                     type="checkbox"
                     :true-value="1"
                     :false-value="0"
-                    v-model="tempProduct.is_enabled"
+                    v-model="product.is_enabled"
                   />
                   <label class="form-check-label" for="is_enabled"
                     >是否啟用</label
@@ -207,30 +205,43 @@
     tabindex="-1"
     aria-labelledby="delProductModalLabel"
     aria-hidden="true"
-  >
-    <del-modal
-      :delete-product="deleteProduct"
-      :temp-product="tempProduct"
-    ></del-modal>
-  </div>
+  ></div>
   <!-- Modal -->
 </template>
 
 <script>
 import Modal from "bootstrap/js/dist/modal";
 export default {
-  props: {
-    product: {
-      type: Object,
-      default() {
-        return {};
-      },
-    },
-  },
+  // props: {
+  //   product: {
+  //     type: Object,
+  //     default() {
+  //       return {};
+  //     },
+  //   },
+  //   isNew: {
+  //     type: Boolean,
+  //     default: false,
+  //   },
+  // },
   data() {
     return {
+      product: [],
+      template: {
+        imagesUrl: [],
+      },
+      isNew: false,
+      page: {},
       modal: "",
     };
+  },
+  methods: {
+    openModal() {
+      this.modal.show();
+    },
+    hideModal() {
+      this.modal.hide();
+    },
   },
   mounted() {
     this.modal = new Modal(this.$refs.productModal);
